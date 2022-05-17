@@ -1,11 +1,17 @@
 import {AdEntity} from "../types";
 import {ValidationError} from "../utils/errors";
+import {pool} from "../utils/db";
+import {FieldPacket} from "mysql2";
 
 interface NewAdEntity extends Omit<AdEntity, 'id'> {
     id?: string;
 }
 
+// Tworzymy specjalny typ do rzeczy jakie zwraca baza danych, po to aby nie czepial sie TypeScript
+type AdRecordResult = [AdEntity[], FieldPacket[]];
+
 export class AdRecord implements AdEntity {
+
     public id?: string;
     public name: string;
     public description: string;
@@ -15,6 +21,7 @@ export class AdRecord implements AdEntity {
     public lon: number;
 
     constructor(obj: NewAdEntity) {
+
         if (!obj.name || obj.name.length > 100) {
             throw new ValidationError('Nazwa ogłoszenia ogłoszenia nie moze być pusta ani przekraczać 100 znakow!');
         }
@@ -46,5 +53,13 @@ export class AdRecord implements AdEntity {
 
     }
 
+    static async getOne(id: string): Promise<AdRecord | null> {
+        const [results] = await pool.execute("SELECT * FROM `ads` WHERE id = :id ", {
+            id,
+        }) as AdRecordResult;
+
+        return results.length === 0 ? null : new AdRecord(results[0]);
+
+    }
 
 }
