@@ -24,4 +24,5 @@ test('Validates invalid price', () => {
     })).toThrow('Cena nie moze być mniejsza niż 0, lub wieksza niż 9 999 999');
 })
 
+
 // @TODO: Check all the validations
