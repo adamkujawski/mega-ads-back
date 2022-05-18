@@ -4,6 +4,7 @@ import 'express-async-errors'
 import {json} from "express";
 import {handleError} from "./utils/errors";
 import rateLimit from "express-rate-limit";
+import {adRouter} from "./routers/ad.router";
 
 const app = express();
 
@@ -18,8 +19,7 @@ app.use(rateLimit({
 }));
 
 
-// Routes
-// Sprawdzenie czy walidacja bledow dziala
+app.use('/ad', adRouter)
 // app.get('/', async (req,res)=> {
 //     throw new Error('Damn');
 // })

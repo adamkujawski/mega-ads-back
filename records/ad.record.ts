@@ -81,6 +81,8 @@ export class AdRecord implements AdEntity {
 
         if (!this.id) {
             this.id = uuid();
+        } else {
+            throw new Error('Cannot insert something what still exist')
         }
 
         await pool.execute("INSERT INTO `ads` VALUES(:id, :name, :description, :price, :url, :lat, :lon)", {

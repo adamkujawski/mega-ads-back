@@ -40,6 +40,16 @@ test('Inset should return id', async () => {
     expect(id).toBeDefined();
 })
 
+test('Insert method should inserts data to database', async () => {
+    const id = await defaultRecord.addNewAd();
+
+    const foundAd = await AdRecord.getOne(id)
+
+    expect(foundAd).toBeDefined();
+    expect(foundAd.id).toBe(id);
+
+})
+
 test('Method getAll should return all ads', async () => {
     const result = await AdRecord.getAll('');
     console.log(result)
